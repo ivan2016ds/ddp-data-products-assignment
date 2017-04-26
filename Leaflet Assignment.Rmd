@@ -1,0 +1,53 @@
+---
+title: "Leaflet Assignment"
+author: "Ivan"
+date: "April 26, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+A very simple `leaflet` assignment showing world cities and populations. Data is obtained from [Simplemaps.com](http://simplemaps.com/data/world-cities).
+
+## Load library and data
+
+```{r loadEnv,warning=F}
+library(leaflet)
+df <- read.csv("simplemaps-worldcities-basic.csv")
+```
+
+## Prepare data
+
+```{r exploreData1}
+head(df)
+```
+
+Create a new variable `title` as markers' popup content, comprising following information:
+
+1. Country
+2. Province
+3. City
+4. Population
+
+```{r exploreData2}
+df$title <- paste0("Country: ",df$country,"<br>","Province: ",df$province,"<br>","City: ",df$city,"<br>","Population: ",df$pop)
+
+df <- df[,c("lat","lng","title")]
+```
+
+## Build map
+
+```{r makeMap,message=F}
+df %>% 
+    leaflet() %>% 
+        addTiles() %>%
+            addMarkers(popup=df$title,clusterOptions=markerClusterOptions())
+```
+
+## Reference
+
+1. http://simplemaps.com/data/world-cities
